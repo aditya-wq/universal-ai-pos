@@ -14,11 +14,5 @@ Thumbs.db
 *.swp
 *.swo
 
-# AIOS local instance state
-.aios/
-snapshots/
-
-# Temporary test files
-test_project_verify/
-temp_test/
+# Temporary files
 *.tmp
