@@ -184,12 +184,14 @@ After performing ANY task, the AI MUST:
 5. Generate an implementation summary
 6. Flag any security concerns
 
-## Large Context Window Scaling (200K - 1M+ Tokens)
+## Context Window Optimization & Scaling (e.g., MiniMax M2.7 / 200K+ Tokens)
 
-When using modern models with large context windows (e.g. 200,000 to 1,000,000+ tokens):
-- **Increase Context Budget**: You can rebuild the context with a higher budget (e.g., `aios build-context --max-tokens 50000`) to include fuller file contents, function bodies, and dependencies.
-- **Rely on Comprehensive Reading**: Use the large context to verify all references and imports, preventing compilation or workflow errors without breaking adjacent functions.
-- **Provide Detailed Diffs**: Document change impact clearly in the prompt history, comparing your implementation against the broader context structure.
+The system is designed to be highly token-efficient for smaller context windows while scaling to take full advantage of large context window models. For example, the MiniMax M2.7 model features a context window of 204,800 tokens (with a usable limit around 196,608 to 200K tokens) and supports a maximum output length of 131,072 tokens.
+
+To optimize context usage across different models:
+- **For Large Context Windows (200K - 1M+ Tokens)**: Do not limit yourself. You can scale the AIOS context budget (e.g., `aios build-context --max-tokens 50000` or higher) to ingest complete files, detailed dependency trees, and full function implementations. This capacity allows the model to process massive inputs, such as entire software repositories, helping you understand how to change code without breaking existing functions or workflow errors.
+- **For Low Context Windows**: Ensure the context remains highly compact and efficient (e.g., keeping `CONTEXT.md` below 10,000 tokens) by relying on summaries, signature mappings, and key endpoint lists.
+- **Workflow Integrity**: Use the appropriate context budget to prevent regressions, verify import paths, and trace code dependencies across modules.
 
 ## Core Behavioral Guidelines
 
