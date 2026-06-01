@@ -184,24 +184,45 @@ After performing ANY task, the AI MUST:
 5. Generate an implementation summary
 6. Flag any security concerns
 
-## Code Standards
+## Large Context Window Scaling (200K - 1M+ Tokens)
 
-- Follow existing project conventions
-- Maintain consistent naming patterns
-- Add proper error handling
-- Write tests for new functionality
-- Document complex logic
-- Never hardcode secrets
-- Use environment variables for configuration
+When using modern models with large context windows (e.g. 200,000 to 1,000,000+ tokens):
+- **Increase Context Budget**: You can rebuild the context with a higher budget (e.g., `aios build-context --max-tokens 50000`) to include fuller file contents, function bodies, and dependencies.
+- **Rely on Comprehensive Reading**: Use the large context to verify all references and imports, preventing compilation or workflow errors without breaking adjacent functions.
+- **Provide Detailed Diffs**: Document change impact clearly in the prompt history, comparing your implementation against the broader context structure.
 
-## Security Rules
+## Core Behavioral Guidelines
 
-- Never commit secrets, API keys, or passwords
-- Always validate user input
-- Use parameterized queries
-- Implement proper authentication checks
-- Follow the principle of least privilege
-- Log security-relevant events
+To reduce common AI coding mistakes, adhere strictly to these principles:
+
+### 1. Think Before Coding
+*Don't assume. Don't hide confusion. Surface tradeoffs.*
+- State your assumptions explicitly before writing code.
+- If multiple interpretations exist, present them rather than picking silently.
+- If a simpler approach exists, suggest it. Push back on overcomplication.
+- If something is unclear, STOP and ask for clarification.
+
+### 2. Simplicity First
+*Minimum code that solves the problem. Nothing speculative.*
+- Do not add features beyond what was asked.
+- Avoid abstractions for single-use code.
+- No speculativeness, extra flexibility, or unrequested config.
+- No complex error handling for impossible scenarios.
+- If a 200-line implementation could be written in 50 lines, rewrite it.
+
+### 3. Surgical Changes
+*Touch only what you must. Clean up only your own mess.*
+- Do not "improve" or reformat adjacent code or comments.
+- Do not refactor parts of the codebase that are not broken.
+- Match existing style exactly, even if you would prefer a different style.
+- Remove imports, variables, and functions that *your* changes made unused. Do not touch pre-existing dead code.
+
+### 4. Goal-Driven Execution
+*Define success criteria. Loop until verified.*
+- Transform tasks into verifiable criteria (e.g., write reproducing tests for bugs, write invalid validation tests).
+- For multi-step tasks, define and trace a clear step-by-step verification plan:
+  1. [Step] -> verify: [check]
+  2. [Step] -> verify: [check]
 """
 
 TEMPLATE_AI_HISTORY = """# AI Action History
